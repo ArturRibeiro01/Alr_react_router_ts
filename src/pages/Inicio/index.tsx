@@ -1,0 +1,45 @@
+import cardapio from 'data/cardapio.json';
+import styles from './Inicio.module.scss';
+import stylesTheme from 'styles/theme.module.scss';
+import imgNossaCasa from 'assets/nossa_casa.png';
+
+import { useNavigate } from 'react-router-dom';
+import { Snack } from 'types/snack';
+
+export default function Inicio() {
+  const navigate = useNavigate();
+
+  let pratosRecomendados = [...cardapio];
+  pratosRecomendados = pratosRecomendados.sort(() => 0.5 - Math.random()).splice(0, 3);
+
+  const detailsRedirect = ((snack: Snack) => {
+    navigate(`snack/${snack.id}`, { state: { ...snack }, replace: true });
+  });
+
+
+  return (
+    <section>
+      <h3 className={stylesTheme.titulo}>Recomendações da Cozinha</h3>
+      <div className={styles.recomendados}>
+        {pratosRecomendados.map(item => (
+          <div key={item.id} className={styles.recomendado}>
+            <div className={styles.recomendado__imagem}>
+              <img src={item.photo} alt={item.title} />
+            </div>
+            <button className={styles.recomendado__botao} onClick={() => detailsRedirect(item)}>
+              Ver mais
+            </button>
+          </div>
+        ))}
+      </div>
+      <h3 className={stylesTheme.titulo}> Nossa casa </h3>
+
+      <div className={styles.nossaCasa}>
+        <img src={imgNossaCasa} alt="Casa do aluroni" />
+        <div className={styles.nossaCasa__endereco}>
+          Rua Vergueiro, 3185 <br /> <br /> Vila Mariana - SP
+        </div>
+      </div>
+    </section>
+  );
+}
